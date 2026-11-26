@@ -2,7 +2,6 @@ CodiMD
 ===
 
 [![build status][build-image]][build-url]
-[![version][github-version-badge]][github-release-page]
 [![Gitter][gitter-image]][gitter-url]
 [![Matrix][matrix-image]][matrix-url]
 [![POEditor][poeditor-image]][poeditor-url]
@@ -114,10 +113,8 @@ To stay up to date with your installation it's recommended to subscribe the [rel
 
 [gitter-image]: https://img.shields.io/badge/gitter-hackmdio/codimd-blue.svg
 [gitter-url]: https://gitter.im/hackmdio/hackmd
-[build-image]: https://github.com/hackmdio/codimd/actions/workflows/build.yml/badge.svg
-[build-url]: https://github.com/hackmdio/codimd/actions/workflows/build.yml
-[github-version-badge]: https://img.shields.io/github/release/hackmdio/codimd.svg
-[github-release-page]: https://github.com/hackmdio/codimd/releases
+[build-image]: https://github.com/EastSun5566/codimd/actions/workflows/build.yml/badge.svg
+[build-url]: https://github.com/EastSun5566/codimd/actions/workflows/build.yml
 [github-release-feed]: https://github.com/hackmdio/codimd/releases.atom
 [poeditor-image]: https://img.shields.io/badge/POEditor-translate-blue.svg
 [poeditor-url]: https://poeditor.com/join/project/q0nuPWyztp
