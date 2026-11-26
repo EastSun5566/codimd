@@ -1,6 +1,9 @@
 node_modules
 composer.phar
 composer.lock
+.env
+.env.*
+!.env.example
 .env.*.php
 .env.php
 .DS_Store

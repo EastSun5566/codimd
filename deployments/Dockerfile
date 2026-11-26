@@ -45,4 +45,24 @@ USER hackmd
 EXPOSE 3000
 ENTRYPOINT ["/usr/bin/tini", "-g", "--", "codimd-entrypoint"]
 
+FROM runtime AS standalone
+USER root
+RUN mkdir -p /etc/postgresql-common \
+    && printf 'create_main_cluster = false\n' > /etc/postgresql-common/createcluster.conf \
+    && apt-get update \
+    && apt-get install -y --no-install-recommends postgresql-17 \
+    && rm -rf /var/lib/apt/lists/* \
+    && install -d -o hackmd -g hackmd /data /data/uploads \
+    && rmdir public/uploads \
+    && ln -s /data/uploads public/uploads
+
+ENV PATH="/usr/lib/postgresql/17/bin:${PATH}" CMD_USECDN=false
+COPY --chmod=755 deployments/docker-standalone.sh /usr/local/bin/codimd-standalone
+USER hackmd
+VOLUME ["/data"]
+STOPSIGNAL SIGTERM
+HEALTHCHECK --start-period=90s --timeout=5s \
+    CMD node -e 'fetch("http://127.0.0.1:" + (process.env.CMD_PORT || 3000) + "/status").then(r => process.exit(r.ok ? 0 : 1)).catch(() => process.exit(1))'
+ENTRYPOINT ["/usr/bin/tini", "-g", "--", "codimd-standalone"]
+
 FROM runtime AS app
