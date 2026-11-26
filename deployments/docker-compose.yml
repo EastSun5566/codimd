@@ -1,4 +1,3 @@
-version: "3"
 services:
   database:
     image: postgres:11.6-alpine
@@ -8,23 +7,25 @@ services:
       - POSTGRES_DB=codimd
     volumes:
       - "database-data:/var/lib/postgresql/data"
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "codimd", "-d", "codimd", "-h", "127.0.0.1"]
+      interval: 5s
+      timeout: 3s
+      retries: 15
     restart: always
   codimd:
-    # you can use image or custom build below,
-    image: nabo.codimd.dev/hackmdio/hackmd:2.5.3
-    # Using the following command to trigger the build
-    # docker-compose -f deployments/docker-compose.yml up --build
-    # build:
-    #   context: ..
-    #   dockerfile: ./deployments/Dockerfile
-    #   args:
-    #     RUNTIME: hackmdio/runtime:16.20.2-35fe7e39
-    #     BUILDPACK: hackmdio/buildpack:16.20.2-35fe7e39
+    image: codimd:app
+    pull_policy: build
+    build:
+      context: ..
+      dockerfile: deployments/Dockerfile
+      target: app
     environment:
       - CMD_DB_URL=postgres://codimd:change_password@database/codimd
       - CMD_USECDN=false
     depends_on:
-      - database
+      database:
+        condition: service_healthy
     ports:
       - "3000:3000"
     volumes:

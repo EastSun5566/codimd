@@ -25,9 +25,9 @@
     "mocha:ci": "mocha --no-color -R dot --require intelli-espower-loader --exit ./test --recursive",
     "coverage": "nyc mocha --require intelli-espower-loader --exit --recursive ./test",
     "coverage:ci": "nyc mocha --no-color -R dot --require intelli-espower-loader --exit --recursive ./test",
-    "test": "npm run-script lint && npm run-script jsonlint && npm run-script coverage",
-    "test:ci": "npm run-script lint && npm run-script jsonlint && npm run-script coverage:ci",
-    "heroku-postbuild": "npm run build && ./bin/heroku"
+    "test": "pnpm lint && pnpm jsonlint && pnpm coverage",
+    "test:ci": "pnpm lint && pnpm jsonlint && pnpm coverage:ci",
+    "heroku-postbuild": "pnpm build && ./bin/heroku"
   },
   "dependencies": {
     "@aws-sdk/client-s3-node": "0.1.0-preview.2",
@@ -57,6 +57,7 @@
     "express-session": "~1.16.2",
     "formidable": "^2.1.1",
     "helmet": "~3.20.0",
+    "highlight.js": "~9.15.9",
     "https-proxy-agent": "^3.0.1",
     "i18n": "^0.15.1",
     "image-type": "^4.1.0",
@@ -65,7 +66,6 @@
     "lodash": "^4.17.21",
     "lutim": "~1.0.2",
     "markdown-it": "~10.0.0",
-    "markdown-pdf": "~9.0.0",
     "method-override": "~3.0.0",
     "minimist": "^1.2.8",
     "minio": "^7.1.1",
@@ -141,7 +141,6 @@
     "gist-embed": "~2.6.0",
     "graceful-fs": "~4.2.1",
     "handlebars": "^4.7.7",
-    "highlight.js": "~9.15.9",
     "html-webpack-plugin": "~4.0.0-beta.2",
     "imports-loader": "~0.8.0",
     "intelli-espower-loader": "~1.0.1",
@@ -198,6 +197,7 @@
     "string-loader": "~0.0.1",
     "style-loader": "~0.23.1",
     "tedious": "~6.2.0",
+    "terser-webpack-plugin": "4.2.3",
     "turndown": "^7.1.1",
     "typo-js": "^1.0.3",
     "url-loader": "~1.0.1",
@@ -207,7 +207,7 @@
     "velocity-animate": "~1.5.2",
     "visibilityjs": "~2.0.2",
     "viz.js": "~2.1.2",
-    "webpack": "~4.39.0",
+    "webpack": "~4.47.0",
     "webpack-cli": "~3.3.6",
     "webpack-merge": "~4.2.1",
     "webpack-parallel-uglify-plugin": "~1.1.0",
@@ -218,8 +218,9 @@
     "bufferutil": "~4.0.0",
     "utf-8-validate": "~5.0.1"
   },
+  "packageManager": "pnpm@12.21.0",
   "engines": {
-    "node": ">=14.0.0 <17.0.0"
+    "node": "26.x"
   },
   "maintainers": [
     {

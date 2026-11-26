@@ -1,12 +1,8 @@
-version: '3'
-
 services: 
   app:
     build:
       context: ..
       dockerfile: .devcontainer/Dockerfile
-      args:
-        VARIANT: 14-bullseye
     environment:
       - CMD_DB_URL=postgres://codimd:codimd@localhost/codimd
       - CMD_USECDN=false
@@ -43,4 +39,4 @@ services:
 
 volumes:
   node_modules:
-  postgres-data: 
+  postgres-data:

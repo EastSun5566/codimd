@@ -2,7 +2,6 @@ CodiMD
 ===
 
 [![build status][build-image]][build-url]
-[![version][github-version-badge]][github-release-page]
 [![Gitter][gitter-image]][gitter-url]
 [![Matrix][matrix-image]][matrix-url]
 [![POEditor][poeditor-image]][poeditor-url]
@@ -20,6 +19,7 @@ Built on [HackMD](https://hackmd.io) source code, CodiMD lets you host and contr
 - [CodiMD - The Open Source HackMD](#codimd---the-open-source-hackmd)
 - [Documentation](#documentation)
   - [Deployment](#deployment)
+    - [Deploy from GitHub Container Registry](#deploy-from-github-container-registry)
   - [Configuration](#configuration)
   - [Upgrading and Migration](#upgrading-and-migration)
   - [Developer](#developer)
@@ -49,8 +49,40 @@ HackMD team is committed to keep CodiMD open source. All contributions are welco
 You would find all documentation here: [CodiMD Documentation](https://hackmd.io/c/codimd-documentation)
 
 ### Deployment
-If you want to spin up an instance and start using immediately, see [Docker deployment](https://hackmd.io/c/codimd-documentation/%2Fs%2Fcodimd-docker-deployment).
-If you want to contribute to the project, start with [manual deployment](https://hackmd.io/c/codimd-documentation/%2Fs%2Fcodimd-manual-deployment).
+
+Run `docker compose up -d` from the repository root and open <http://localhost:3000>.
+The standalone image starts CodiMD and PostgreSQL 17, then runs the database migrations.
+The named volume mounted at `/data` stores the database, uploaded files, and generated session secret.
+Place CodiMD settings such as `CMD_DOMAIN` and `CMD_PROTOCOL_USESSL` in an optional `.env` file to pass them to the container.
+
+The same image runs directly with Docker.
+
+```sh
+docker build --target standalone -f deployments/Dockerfile -t codimd:standalone .
+docker run -d --name codimd --restart unless-stopped --stop-timeout 30 \
+  -p 3000:3000 -v codimd-data:/data codimd:standalone
+```
+
+Use one container per data volume. To switch from Compose to `docker run`, stop the Compose service and substitute its `<project>_codimd-data` volume in the command above.
+A bind-mounted directory must be writable by UID/GID 1500.
+To move an existing deployment into the standalone image, import a PostgreSQL logical backup into the bundled database and copy the uploads into `/data/uploads`.
+
+For a separate database container, run `docker compose -f deployments/docker-compose.yml up -d`.
+Use the Dockerfile's `app` target with `CMD_DB_URL` when you already have a database server.
+
+#### Deploy from GitHub Container Registry
+
+Run [Publish standalone image](https://github.com/EastSun5566/codimd/actions/workflows/publish-standalone.yml) on `develop` to publish Linux AMD64 and ARM64 images.
+The workflow publishes the `latest` and `sha-<full-commit-sha>` tags after CI passes.
+Use the commit tag to pin the image for a deployment.
+
+For a private package, run `docker login ghcr.io -u EastSun5566` on the deployment host and enter a classic GitHub token with `read:packages`.
+
+```sh
+docker pull ghcr.io/eastsun5566/codimd-standalone:latest
+docker run -d --name codimd --restart unless-stopped --stop-timeout 30 \
+  -p 3000:3000 -v codimd-data:/data ghcr.io/eastsun5566/codimd-standalone:latest
+```
 
 ### Configuration
 CodiMD is highly customizable, learn about all configuration options of networking, security, performance, resources, privilege, privacy, image storage, and authentication in [CodiMD Configuration](https://hackmd.io/c/codimd-documentation/%2Fs%2Fcodimd-configuration).
@@ -60,6 +92,9 @@ Upgrade CodiMD from previous version? See [this guide](https://hackmd.io/c/codim
 Migrating from Etherpad? Follow [this guide](https://hackmd.io/c/codimd-documentation/%2Fs%2Fcodimd-migration-etherpad)
 
 ### Developer
+Install Node.js 26 and the pnpm 12 version in `package.json`, then run `./bin/setup`, `pnpm build`, and `pnpm test`.
+For document and PDF export in a manual deployment, install the official Pandoc build with embedded data files and put it and WeasyPrint on your PATH.
+
 Join our contributor community! Start from deploying [CodiMD manually](https://hackmd.io/c/codimd-documentation/%2Fs%2Fcodimd-manual-deployment), [connecting to your own database](https://hackmd.io/c/codimd-documentation/%2Fs%2Fcodimd-db-connection), [learn about the project structure](https://hackmd.io/c/codimd-documentation/%2Fs%2Fcodimd-project-structure), to [build your changes](https://hackmd.io/c/codimd-documentation/%2Fs%2Fcodimd-webpack) with the help of webpack.
 
 ## Contribution and Discussion
@@ -93,10 +128,8 @@ To stay up to date with your installation it's recommended to subscribe the [rel
 
 [gitter-image]: https://img.shields.io/badge/gitter-hackmdio/codimd-blue.svg
 [gitter-url]: https://gitter.im/hackmdio/hackmd
-[build-image]: https://github.com/hackmdio/codimd/actions/workflows/build.yml/badge.svg
-[build-url]: https://github.com/hackmdio/codimd/actions/workflows/build.yml
-[github-version-badge]: https://img.shields.io/github/release/hackmdio/codimd.svg
-[github-release-page]: https://github.com/hackmdio/codimd/releases
+[build-image]: https://github.com/EastSun5566/codimd/actions/workflows/build.yml/badge.svg
+[build-url]: https://github.com/EastSun5566/codimd/actions/workflows/build.yml
 [github-release-feed]: https://github.com/hackmdio/codimd/releases.atom
 [poeditor-image]: https://img.shields.io/badge/POEditor-translate-blue.svg
 [poeditor-url]: https://poeditor.com/join/project/q0nuPWyztp

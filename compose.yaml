@@ -1,0 +1,20 @@
+services:
+  codimd:
+    image: codimd:standalone
+    pull_policy: build
+    build:
+      context: .
+      dockerfile: deployments/Dockerfile
+      target: standalone
+    env_file:
+      - path: .env
+        required: false
+    ports:
+      - "3000:3000"
+    volumes:
+      - codimd-data:/data
+    restart: unless-stopped
+    stop_grace_period: 30s
+
+volumes:
+  codimd-data:
