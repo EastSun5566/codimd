@@ -19,6 +19,7 @@ Built on [HackMD](https://hackmd.io) source code, CodiMD lets you host and contr
 - [CodiMD - The Open Source HackMD](#codimd---the-open-source-hackmd)
 - [Documentation](#documentation)
   - [Deployment](#deployment)
+    - [Deploy from GitHub Container Registry](#deploy-from-github-container-registry)
   - [Configuration](#configuration)
   - [Upgrading and Migration](#upgrading-and-migration)
   - [Developer](#developer)
@@ -68,6 +69,20 @@ To move an existing deployment into the standalone image, import a PostgreSQL lo
 
 For a separate database container, run `docker compose -f deployments/docker-compose.yml up -d`.
 Use the Dockerfile's `app` target with `CMD_DB_URL` when you already have a database server.
+
+#### Deploy from GitHub Container Registry
+
+Run [Publish standalone image](https://github.com/EastSun5566/codimd/actions/workflows/publish-standalone.yml) on `develop` to publish Linux AMD64 and ARM64 images.
+The workflow publishes the `latest` and `sha-<full-commit-sha>` tags after CI passes.
+Use the commit tag to pin the image for a deployment.
+
+For a private package, run `docker login ghcr.io -u EastSun5566` on the deployment host and enter a classic GitHub token with `read:packages`.
+
+```sh
+docker pull ghcr.io/eastsun5566/codimd-standalone:latest
+docker run -d --name codimd --restart unless-stopped --stop-timeout 30 \
+  -p 3000:3000 -v codimd-data:/data ghcr.io/eastsun5566/codimd-standalone:latest
+```
 
 ### Configuration
 CodiMD is highly customizable, learn about all configuration options of networking, security, performance, resources, privilege, privacy, image storage, and authentication in [CodiMD Configuration](https://hackmd.io/c/codimd-documentation/%2Fs%2Fcodimd-configuration).
