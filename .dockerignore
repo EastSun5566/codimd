@@ -1,4 +1,8 @@
 .idea
+.git
+.env
+.env.*
+.npmrc
 coverage
 node_modules/
 
@@ -9,6 +13,7 @@ config.json
 # ignore webpack build
 public/build
 public/views/build
+public/uploads
 
 .nyc_output
 coverage/

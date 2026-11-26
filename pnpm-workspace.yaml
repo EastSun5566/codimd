@@ -1,0 +1,9 @@
+nodeLinker: hoisted
+allowBuilds:
+  '@hackmd/pandoc.js': false
+  bufferutil: false
+  core-js: false
+  core-js-pure: false
+  dtrace-provider: false
+  fsevents: false
+  utf-8-validate: false

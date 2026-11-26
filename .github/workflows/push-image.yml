@@ -4,15 +4,6 @@ on:
   release:
     types: [published]
   workflow_dispatch:
-    inputs:
-      runtime:
-        description: 'Runtime image'
-        required: true
-        default: 'hackmdio/runtime:16.20.2-35fe7e39'
-      buildpack:
-        description: 'Buildpack image'
-        required: true
-        default: 'hackmdio/buildpack:16.20.2-35fe7e39'
 
 env:
   REGISTRY_IMAGE: hackmdio/hackmd
@@ -60,12 +51,10 @@ jobs:
         with:
           context: .
           file: ./deployments/Dockerfile
+          target: app
           platforms: ${{ matrix.platform }}
           labels: ${{ steps.meta.outputs.labels }}
           outputs: type=image,name=${{ env.REGISTRY_IMAGE }},push-by-digest=true,name-canonical=true,push=true
-          build-args: |
-            RUNTIME=${{ github.event.inputs.runtime || 'hackmdio/runtime:16.20.2-35fe7e39' }}
-            BUILDPACK=${{ github.event.inputs.buildpack || 'hackmdio/buildpack:16.20.2-35fe7e39' }}
       -
         name: Export digest
         run: |

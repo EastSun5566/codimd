@@ -3,10 +3,14 @@ const htmlexport = require('./webpack.htmlexport')
 const merge = require('webpack-merge')
 const path = require('path')
 const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin')
+const TerserPlugin = require('terser-webpack-plugin')
 
 module.exports = [
   merge(common, {
     mode: 'production',
+    optimization: {
+      minimizer: [new TerserPlugin()]
+    },
     output: {
       path: path.join(__dirname, 'public/build'),
       publicPath: '/build/',
