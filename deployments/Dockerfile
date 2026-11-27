@@ -64,5 +64,3 @@ STOPSIGNAL SIGTERM
 HEALTHCHECK --start-period=90s --timeout=5s \
     CMD node -e 'fetch("http://127.0.0.1:" + (process.env.CMD_PORT || 3000) + "/status").then(r => process.exit(r.ok ? 0 : 1)).catch(() => process.exit(1))'
 ENTRYPOINT ["/usr/bin/tini", "-g", "--", "codimd-standalone"]
-
-FROM runtime AS app
