@@ -67,9 +67,6 @@ Use one container per data volume. To switch from Compose to `docker run`, stop 
 A bind-mounted directory must be writable by UID/GID 1500.
 To move an existing deployment into the standalone image, import a PostgreSQL logical backup into the bundled database and copy the uploads into `/data/uploads`.
 
-For a separate database container, run `docker compose -f deployments/docker-compose.yml up -d`.
-Use the Dockerfile's `app` target with `CMD_DB_URL` when you already have a database server.
-
 #### Deploy from GitHub Container Registry
 
 Run [Publish standalone image](https://github.com/EastSun5566/codimd/actions/workflows/publish-standalone.yml) on `develop` to publish Linux AMD64 and ARM64 images.
@@ -94,6 +91,7 @@ Migrating from Etherpad? Follow [this guide](https://hackmd.io/c/codimd-document
 ### Developer
 Install Node.js 26 and the pnpm 12 version in `package.json`, then run `./bin/setup`, `pnpm build`, and `pnpm test`.
 For document and PDF export in a manual deployment, install the official Pandoc build with embedded data files and put it and WeasyPrint on your PATH.
+The dev container starts PostgreSQL 17 on a fresh `postgres-17-data` volume. To carry over development data, restore a logical backup from the old PostgreSQL volume.
 
 Join our contributor community! Start from deploying [CodiMD manually](https://hackmd.io/c/codimd-documentation/%2Fs%2Fcodimd-manual-deployment), [connecting to your own database](https://hackmd.io/c/codimd-documentation/%2Fs%2Fcodimd-db-connection), [learn about the project structure](https://hackmd.io/c/codimd-documentation/%2Fs%2Fcodimd-project-structure), to [build your changes](https://hackmd.io/c/codimd-documentation/%2Fs%2Fcodimd-webpack) with the help of webpack.
 
@@ -120,8 +118,6 @@ CodiMD is a service that runs on Node.js, while users use the service through br
 - <img src="https://raw.githubusercontent.com/alrra/browser-logos/master/src/opera/opera_48x48.png" alt="Opera" width="24px" height="24px" /> Opera >= 34, Opera Mini not supported
 - Android Browser >= 4.4
 
-To stay up to date with your installation it's recommended to subscribe the [release feed][github-release-feed].
-
 ## License
 
 **License under AGPL.**
@@ -130,7 +126,6 @@ To stay up to date with your installation it's recommended to subscribe the [rel
 [gitter-url]: https://gitter.im/hackmdio/hackmd
 [build-image]: https://github.com/EastSun5566/codimd/actions/workflows/build.yml/badge.svg
 [build-url]: https://github.com/EastSun5566/codimd/actions/workflows/build.yml
-[github-release-feed]: https://github.com/hackmdio/codimd/releases.atom
 [poeditor-image]: https://img.shields.io/badge/POEditor-translate-blue.svg
 [poeditor-url]: https://poeditor.com/join/project/q0nuPWyztp
 [matrix-image]: https://img.shields.io/matrix/hackmdio_hackmd:gitter.im?color=blue&logo=matrix

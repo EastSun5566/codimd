@@ -26,8 +26,7 @@
     "coverage": "nyc mocha --require intelli-espower-loader --exit --recursive ./test",
     "coverage:ci": "nyc mocha --no-color -R dot --require intelli-espower-loader --exit --recursive ./test",
     "test": "pnpm lint && pnpm jsonlint && pnpm coverage",
-    "test:ci": "pnpm lint && pnpm jsonlint && pnpm coverage:ci",
-    "heroku-postbuild": "pnpm build && ./bin/heroku"
+    "test:ci": "pnpm lint && pnpm jsonlint && pnpm coverage:ci"
   },
   "dependencies": {
     "@aws-sdk/client-s3-node": "0.1.0-preview.2",
